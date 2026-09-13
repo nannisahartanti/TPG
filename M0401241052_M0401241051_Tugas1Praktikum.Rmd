@@ -1,0 +1,160 @@
+---
+title: "M0401241052_M0401241051_Tugas1Praktikum"
+output:
+  html_document:
+    css: style.css
+    theme: flatly
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+  pdf_document:
+    toc: true
+    toc_depth: 3
+  word_document: default
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+-   **Nur Annisa Hartanti Putri - M0401241051**
+
+-   **Rachel Anindya Aulia Safitri - M0401241052**
+
+# Latihan Soal 1
+
+```{r}
+# Matriks kovarian
+Sigma <- matrix(c(4, 1, 0,
+                  1, 3, 0,
+                  0, 0, 2),
+                nrow = 3, byrow = TRUE)
+
+Sigma
+```
+
+## 1. Apakah X1 dan X3 saling bebas?
+
+```{r}
+cov_x1_x3 <- Sigma[1, 3]
+cov_x1_x3
+
+cov_x1_x3 == 0
+```
+
+Nilai kovarian antara $X_1$ dan $X_3$ adalah 0. Hasil pengecekan juga
+menunjukkan `TRUE`, sehingga $X_1$ dan $X_3$ saling bebas.
+
+## 2. Apakah (X1, X3) dan X2 saling bebas?
+
+```{r}
+# Mengubah urutan peubah menjadi X1, X3, X2
+Sigma_star <- Sigma[c(1, 3, 2), c(1, 3, 2)]
+Sigma_star
+
+# Mengambil kovarian silang antara (X1, X3) dan X2
+Sigma_star12 <- Sigma_star[1:2, 3, drop = FALSE]
+Sigma_star12
+
+# Mengecek apakah seluruh kovarian silang sama dengan 0
+all(Sigma_star12 == 0)
+```
+
+Matriks kovarian disusun kembali berdasarkan urutan $X_1, X_3, X_2$,
+sehingga diperoleh kovarian silang
+
+$$
+\Sigma_{*12} =
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}.
+$$
+
+Karena tidak seluruh elemen kovarian silang bernilai 0 dan hasil
+pengecekan menunjukkan `FALSE`, maka $(X_1, X_3)$ dan $X_2$ tidak saling
+bebas.
+
+# Latihan Soal 2
+
+![](images/clipboard-4152221938.png)
+
+## Input Data
+
+```{r}
+# Memasukkan data
+x <- c(8.8, 8.5, 7.7, 4.9, 9.6, 10, 11.5, 11.6, 11.2, 10.7, 10, 6.8,2589, 1186, 291, 1276, 6633, 12125, 36717, 43319, 10530, 3931, 1536, 61400)
+
+# Membentuk matriks 12 baris dan 2 kolom
+data <- matrix(x, nrow = 12, ncol = 2)
+
+# Memberi nama kolom
+colnames(data) <- c("X1", "X2")
+
+data
+```
+
+## Uji Normalitas menggunakan Mardia’s Test
+
+```{r}
+library(MVN)
+mardia <- mvn(data, mvn_test = c("mardia"))
+plot(mardia, diagnostic = "multivariate", type = "qq")
+
+mardia
+```
+
+Dari hasil R diatas akan dilakukan pengujian hipotesis terhadap mardia
+skewness test sebagai berikut :
+
+-   H0 : Peubah ganda mengikuti distribusi normal
+
+-   H1 : Peubah ganda tidak mengikuti distribusi normal
+
+Dari hasil uji Mardia diperoleh p-value sebesar 0,025 pada Mardia
+Skewness dan 0,555 pada Mardia Kurtosis. Dengan taraf signifikansi
+α=0,05, Mardia Skewness memiliki p-value 0,025\<0,05, sehingga H₀
+ditolak. Sedangkan Mardia Kurtosis memiliki p-value 0,555\>0,05,
+sehingga H₀ gagal ditolak. Karena salah satu pengujian Mardia
+menunjukkan hasil yang signifikan, maka dapat disimpulkan bahwa peubah
+ganda tidak mengikuti distribusi normal bivariat.
+
+## Uji normalitas ganda menggunakan Henze-Zikler Test
+
+```{r}
+henze <- mvn(data, mvn_test = c("hz"))
+plot(henze, diagnostic = "multivariate", type = "qq")
+henze
+```
+
+Dari hasil Henze-Zirkler’s Multivariate Normality Test diperoleh nilai
+p-value sebesar 0,004. Dengan taraf signifikansi α=0,05 diperoleh
+0,004\<0,05 sehingga H₀ ditolak. Hasil tersebut didukung oleh
+Mahalanobis Q-Q Plot, di mana sebagian besar titik pengamatan berada di
+sekitar garis diagonal, tetapi terdapat beberapa penyimpangan terutama
+pada bagian ekor kanan. Dengan demikian, peubah-peubah tersebut tidak
+mengikuti distribusi normal ganda (bivariat).
+
+## Uji Normalitas ganda menggunakan Royston
+
+```{r}
+royston <- mvn(data, mvn_test = c("royston"))
+plot(royston, diagnostic = "multivariate", type = "persp")
+royston
+```
+
+Dari Royston Test diperoleh nilai p-value sebesar 0,006. Dengan taraf
+signifikansi α=0,05\\alpha=0,05, diperoleh 0,006\<\< 0,05, sehingga H₀
+ditolak. Dengan demikian, dapat disimpulkan bahwa peubah-peubah tersebut
+tidak mengikuti distribusi normal ganda (bivariat).
+
+## Kesimpulan
+
+Berdasarkan hasil pengujian normalitas bivariat menggunakan Mardia,
+Henze-Zirkler, dan Royston diperoleh bahwa Mardia Skewness menghasilkan
+p-value sebesar 0.025, Henze-Zirkler sebesar 0.004, dan Royston sebesar
+0,006, yang seluruhnya lebih kecil dari α=0.05. Meskipun pada Mardia
+Kurtosis diperoleh p-value 0.555 \> 0,05, secara keseluruhan hasil
+pengujian menunjukkan bahwa data tidak memenuhi asumsi distribusi normal
+bivariat. Dengan demikian, peubah X₁ dan X₂ tidak mengikuti distribusi
+normal ganda (bivariat).
