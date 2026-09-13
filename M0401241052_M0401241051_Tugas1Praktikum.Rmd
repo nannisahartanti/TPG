@@ -96,6 +96,34 @@ data
 
 ## Uji Normalitas menggunakan Mardia’s Test
 
+### Cara 1
+
+```{r}
+library(psych)
+
+# 1. Eksekusi Uji Mardia & Visualisasi Q-Q Plot
+mardia <- psych::mardia(data, plot = TRUE)
+
+# 2. Matriks Kovarians
+cov(data)
+
+# 3. Cetak Hasil Pengujian Hipotesis
+cat("           PENGUJIAN HIPOTESIS MARDIA            \n")
+cat("H0 : Data menyebar mengikuti distribusi normal multivariat\n")
+cat("H1 : Data TIDAK menyebar mengikuti distribusi normal multivariat\n")
+
+cat("1. Uji Skewness (Kemiringan):\n")
+cat("   - p-value   :", round(mardia$p.skew, 4), "\n")
+cat("   - Keputusan :", ifelse(mardia$p.skew > 0.05, "Terima H0 (Normal)", "Tolak H0 (Tidak Normal)"), "\n\n")
+
+cat("2. Uji Kurtosis (Keruncingan):\n")
+cat("   - p-value   :", round(mardia$p.kurt, 4), "\n")
+cat("   - Keputusan :", ifelse(mardia$p.kurt > 0.05, "Terima H0 (Normal)", "Tolak H0 (Tidak Normal)"), "\n")
+
+```
+
+### Cara 2
+
 ```{r}
 library(MVN)
 mardia <- mvn(data, mvn_test = c("mardia"))
@@ -104,6 +132,8 @@ plot(mardia, diagnostic = "multivariate", type = "qq")
 mardia
 ```
 
+### Kesimpulan
+
 Dari hasil R diatas akan dilakukan pengujian hipotesis terhadap mardia
 skewness test sebagai berikut :
 
@@ -111,15 +141,43 @@ skewness test sebagai berikut :
 
 -   H1 : Peubah ganda tidak mengikuti distribusi normal
 
-Dari hasil uji Mardia diperoleh p-value sebesar 0,025 pada Mardia
-Skewness dan 0,555 pada Mardia Kurtosis. Dengan taraf signifikansi
-α=0,05, Mardia Skewness memiliki p-value 0,025\<0,05, sehingga H₀
-ditolak. Sedangkan Mardia Kurtosis memiliki p-value 0,555\>0,05,
-sehingga H₀ gagal ditolak. Karena salah satu pengujian Mardia
-menunjukkan hasil yang signifikan, maka dapat disimpulkan bahwa peubah
-ganda tidak mengikuti distribusi normal bivariat.
+Berdasarkan hasil uji Mardia menggunakan package `psych`, diperoleh
+p-value pada uji skewness sebesar 0.2147 dan uji kurtosis sebesar
+0.9541. Kedua p-value tersebut lebih besar dari α = 0.05, sehingga H₀
+tidak ditolak. Dengan demikian, berdasarkan uji Mardia menggunakan cara
+1, data X1 dan X2 dapat dianggap mengikuti distribusi normal
+multivariat.\
+\
+Berdasarkan hasil uji Mardia menggunakan package `MVN`, diperoleh
+p-value pada uji skewness sebesar 0.025 \< 0.05, sehingga H₀ ditolak.
+Sementara itu, uji kurtosis menghasilkan p-value sebesar 0.555 \> 0.05,
+sehingga H₀ tidak ditolak. Dengan demikian, berdasarkan uji Mardia
+menggunakan cara 2, terdapat indikasi bahwa data X1 dan X2 tidak
+mengikuti distribusi normal multivariat karena uji skewness menunjukkan
+hasil yang signifikan.\
+\
+Hasil pengujian menggunakan dua metode menunjukkan hasil yang berbeda.
+Pada cara 1 menggunakan `psych::mardia()`, baik skewness maupun kurtosis
+tidak signifikan sehingga data dianggap normal multivariat. Sementara
+itu, pada cara 2 menggunakan `MVN::mvn()`, uji skewness signifikan
+sedangkan kurtosis tidak signifikan, sehingga terdapat indikasi
+ketidaknormalan multivariat.
 
 ## Uji normalitas ganda menggunakan Henze-Zikler Test
+
+### Cara 1
+
+```{r}
+library(mvnTest)
+
+# 1. Eksekusi Uji Henze-Zirkler
+hz_result <- HZ.test(data)
+
+# 2. Tampilkan Output Ringkas
+print(hz_result)
+```
+
+### Cara 2
 
 ```{r}
 henze <- mvn(data, mvn_test = c("hz"))
@@ -127,13 +185,28 @@ plot(henze, diagnostic = "multivariate", type = "qq")
 henze
 ```
 
-Dari hasil Henze-Zirkler’s Multivariate Normality Test diperoleh nilai
-p-value sebesar 0,004. Dengan taraf signifikansi α=0,05 diperoleh
-0,004\<0,05 sehingga H₀ ditolak. Hasil tersebut didukung oleh
-Mahalanobis Q-Q Plot, di mana sebagian besar titik pengamatan berada di
-sekitar garis diagonal, tetapi terdapat beberapa penyimpangan terutama
-pada bagian ekor kanan. Dengan demikian, peubah-peubah tersebut tidak
-mengikuti distribusi normal ganda (bivariat).
+### Kesimpulan 
+
+Berdasarkan hasil uji Henze-Zirkler menggunakan cara 1, diperoleh
+p-value sebesar 0.0051. Nilai tersebut lebih kecil dari α = 0.05,
+sehingga H₀ ditolak. Dengan demikian, berdasarkan uji Henze-Zirkler
+menggunakan cara 1, data X1 dan X2 tidak mengikuti distribusi normal
+multivariat.
+
+Berdasarkan hasil uji Henze-Zirkler menggunakan package `MVN`, diperoleh
+p-value sebesar 0.004. Nilai tersebut lebih kecil dari α = 0.05,
+sehingga H₀ ditolak. Dengan demikian, berdasarkan uji Henze-Zirkler
+menggunakan cara 2, data X1 dan X2 tidak mengikuti distribusi normal
+multivariat.
+
+Hasil pengujian menggunakan dua cara menunjukkan kesimpulan yang sama.
+Pada cara 1 diperoleh p-value sebesar 0.0051, sedangkan pada cara 2
+diperoleh p-value sebesar 0.004. Kedua p-value tersebut lebih kecil dari
+α = 0.05 sehingga H₀ ditolak. **Dengan demikian, berdasarkan uji
+Henze-Zirkler, data X1 dan X2 tidak mengikuti distribusi normal
+multivariat.** Hasil tersebut didukung oleh Mahalanobis Q-Q Plot, di
+mana sebagian besar titik pengamatan berada di sekitar garis diagonal,
+tetapi terdapat beberapa penyimpangan terutama pada bagian ekor kanan.
 
 ## Uji Normalitas ganda menggunakan Royston
 
@@ -156,13 +229,24 @@ royston1
 
 ## Kesimpulan
 
-Berdasarkan hasil pengujian normalitas bivariat menggunakan Mardia,
-Henze-Zirkler, dan Royston diperoleh bahwa Mardia Skewness menghasilkan
-p-value sebesar 0.025, Henze-Zirkler sebesar 0.004, dan Royston sebesar
-0,006, yang seluruhnya lebih kecil dari α=0.05. Meskipun pada Mardia
-Kurtosis diperoleh p-value 0.555 \> 0,05, secara keseluruhan hasil
-pengujian menunjukkan bahwa data tidak memenuhi asumsi distribusi normal
-bivariat. **Dengan demikian, peubah X₁ dan X₂ tidak mengikuti distribusi
-normal ganda (bivariat).** Sehingga dapat dilakukan penangan lanjutan
-terhadap data tersebut, dapat menggunakan transformasi normal atau
-metode lainnya.
+Berdasarkan seluruh pengujian normalitas multivariat yang telah
+dilakukan, yaitu **Mardia Test, Henze-Zirkler Test, dan Royston Test**,
+diperoleh hasil yang menunjukkan adanya perbedaan pada beberapa
+pengujian Mardia. Pada `psych::mardia()`, uji skewness dan kurtosis
+menghasilkan p-value masing-masing sebesar **0,2147** dan **0,9541**,
+sehingga H₀ tidak ditolak. Sementara itu, pada `MVN::mvn()`, uji Mardia
+Skewness menghasilkan **p-value 0,025 \< 0,05**, sehingga H₀ ditolak,
+sedangkan Mardia Kurtosis menghasilkan **p-value 0,555 \> 0,05**,
+sehingga H₀ tidak ditolak.
+
+Namun, pada **uji Henze-Zirkler**, baik cara 1 maupun cara 2 memberikan
+hasil yang konsisten, dengan p-value masing-masing sebesar **0,0051**
+dan **0,004**, yang keduanya lebih kecil dari 0,05 sehingga H₀ ditolak.
+Hasil tersebut juga sejalan dengan **Royston Test** yang menghasilkan
+p-value sebesar **0,006 \< 0,05**, sehingga H₀ ditolak. Selain itu,
+Mahalanobis Q-Q Plot menunjukkan adanya beberapa penyimpangan dari garis
+diagonal, terutama pada bagian ekor kanan.
+
+**Dengan demikian, berdasarkan keseluruhan hasil pengujian, data X1 dan
+X2 dapat disimpulkan tidak mengikuti distribusi normal ganda
+(bivariat).**
