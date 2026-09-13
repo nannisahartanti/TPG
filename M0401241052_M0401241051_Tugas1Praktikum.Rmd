@@ -150,7 +150,7 @@ distribusi normal ganda (bivariat).
 
 ```{r}
 royston1 <- mvn(data, mvn_test = c("royston"))
-plot(royston, diagnostic = "multivariate", type = "persp")
+plot(royston, diagnostic = "multivariate", type = "contour")
 royston1
 ```
 
@@ -162,7 +162,7 @@ p-value sebesar 0.025, Henze-Zirkler sebesar 0.004, dan Royston sebesar
 0,006, yang seluruhnya lebih kecil dari α=0.05. Meskipun pada Mardia
 Kurtosis diperoleh p-value 0.555 \> 0,05, secara keseluruhan hasil
 pengujian menunjukkan bahwa data tidak memenuhi asumsi distribusi normal
-bivariat. Dengan demikian, peubah X₁ dan X₂ tidak mengikuti distribusi
-normal ganda (bivariat). Sehingga dapat dilakukan penangan lanjutan
+bivariat. **Dengan demikian, peubah X₁ dan X₂ tidak mengikuti distribusi
+normal ganda (bivariat).** Sehingga dapat dilakukan penangan lanjutan
 terhadap data tersebut, dapat menggunakan transformasi normal atau
 metode lainnya.
