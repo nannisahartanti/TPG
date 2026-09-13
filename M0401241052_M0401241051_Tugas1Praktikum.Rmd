@@ -248,5 +248,6 @@ Mahalanobis Q-Q Plot menunjukkan adanya beberapa penyimpangan dari garis
 diagonal, terutama pada bagian ekor kanan.
 
 **Dengan demikian, berdasarkan keseluruhan hasil pengujian, data X1 dan
-X2 dapat disimpulkan tidak mengikuti distribusi normal ganda
-(bivariat).**
+X2 dapat disimpulkan tidak mengikuti distribusi normal ganda (bivariat).
+Sehingga dapat dilakukan penangan lanjutan terhadap data tersebut, dapat
+menggunakan transformasi normal atau metode lainnya.**
