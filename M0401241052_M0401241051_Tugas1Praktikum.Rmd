@@ -144,9 +144,15 @@ royston
 ```
 
 Dari Royston Test diperoleh nilai p-value sebesar 0,006. Dengan taraf
-signifikansi α=0,05\\alpha=0,05, diperoleh 0,006\<\< 0,05, sehingga H₀
-ditolak. Dengan demikian, dapat disimpulkan bahwa peubah-peubah tersebut
-tidak mengikuti distribusi normal ganda (bivariat).
+signifikansi α=0,05, diperoleh 0,006\< 0,05, sehingga H₀ ditolak. Dengan
+demikian, dapat disimpulkan bahwa peubah-peubah tersebut tidak mengikuti
+distribusi normal ganda (bivariat).
+
+```{r}
+royston1 <- mvn(data, mvn_test = c("royston"))
+plot(royston, diagnostic = "multivariate", type = "persp")
+royston1
+```
 
 ## Kesimpulan
 
@@ -157,4 +163,6 @@ p-value sebesar 0.025, Henze-Zirkler sebesar 0.004, dan Royston sebesar
 Kurtosis diperoleh p-value 0.555 \> 0,05, secara keseluruhan hasil
 pengujian menunjukkan bahwa data tidak memenuhi asumsi distribusi normal
 bivariat. Dengan demikian, peubah X₁ dan X₂ tidak mengikuti distribusi
-normal ganda (bivariat).
+normal ganda (bivariat). Sehingga dapat dilakukan penangan lanjutan
+terhadap data tersebut, dapat menggunakan transformasi normal atau
+metode lainnya.
