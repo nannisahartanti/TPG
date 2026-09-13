@@ -227,6 +227,13 @@ plot(royston, diagnostic = "multivariate", type = "contour")
 royston1
 ```
 
+Berdasarkan Kernel Density Estimate (Contour), persebaran data X1 dan X2
+menunjukkan pola yang tidak sepenuhnya simetris dan tidak membentuk pola
+elips yang jelas. Hal ini mengindikasikan adanya penyimpangan dari pola
+distribusi normal bivariat. Hasil visualisasi tersebut mendukung hasil
+pengujian normalitas multivariat yang menunjukkan bahwa data X1 dan X2
+tidak menyebar normal bivariat.
+
 ## Kesimpulan
 
 Berdasarkan seluruh pengujian normalitas multivariat yang telah
@@ -244,8 +251,12 @@ hasil yang konsisten, dengan p-value masing-masing sebesar **0,0051**
 dan **0,004**, yang keduanya lebih kecil dari 0,05 sehingga H₀ ditolak.
 Hasil tersebut juga sejalan dengan **Royston Test** yang menghasilkan
 p-value sebesar **0,006 \< 0,05**, sehingga H₀ ditolak. Selain itu,
-Mahalanobis Q-Q Plot menunjukkan adanya beberapa penyimpangan dari garis
-diagonal, terutama pada bagian ekor kanan.
+**Mahalanobis Q-Q Plot** menunjukkan beberapa titik yang menyimpang dari
+garis diagonal, terutama pada bagian ekor kanan. Kernel Density Estimate
+(Contour) juga memperlihatkan pola persebaran yang cenderung tidak
+simetris dan tidak membentuk pola elips yang jelas. Kedua visualisasi
+tersebut menunjukkan adanya penyimpangan dari karakteristik distribusi
+normal bivariat.
 
 **Dengan demikian, berdasarkan keseluruhan hasil pengujian, data X1 dan
 X2 dapat disimpulkan tidak mengikuti distribusi normal ganda (bivariat).
